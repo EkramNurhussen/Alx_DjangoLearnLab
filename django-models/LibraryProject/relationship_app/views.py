@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required  # Ensure this line is present
-from .models import Book, Library, UserProfile
-
+from .models import Book, UserProfile
+from .models import Library
 def book_list(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
