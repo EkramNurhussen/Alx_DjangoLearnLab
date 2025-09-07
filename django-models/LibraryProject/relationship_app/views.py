@@ -1,26 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Book, Library
 
-# Function-based view
 def book_list(request):
     books = Book.objects.all()
-<<<<<<< HEAD
     return render(request, 'relationship_app/list_books.html', {'books': books})
-=======
-    output = ", ".join([f"{book.title} by {book.author.name}" for book in books])
-    return HttpResponse(output)
 
->>>>>>> 12dc951916406a4824770851ea23a5f219f466e8
-
-# Class-based view
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = "relationship_app/library_detail.html"
-    context_object_name = "library"
+    template_name = 'relationship_app/library_detail.html'
+    context_object_name = 'library'
+    pk_url_kwarg = 'id'
+
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
