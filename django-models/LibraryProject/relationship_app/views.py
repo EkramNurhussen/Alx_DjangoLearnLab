@@ -12,4 +12,4 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
-    pk_url_kwarg = 'id'  # Map the URL parameter 'id' to the model's pk
+    pk_url_kwarg = 'id'  # Match the URL parameter from urls.py
