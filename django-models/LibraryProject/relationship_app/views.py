@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required  # Ensure this line is present
 from .models import Book, Library, UserProfile
 
 def book_list(request):
@@ -20,7 +20,8 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('book_list')
+            next_url = request.GET.get('next', 'book_list')
+            return redirect(next_url)
     else:
         form = AuthenticationForm()
     return render(request, 'relationship_app/login.html', {'form': form})
@@ -70,7 +71,7 @@ def member_view(request):
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     if request.method == 'POST':
-        # Simplified: Add book logic (e.g., form handling would go here)
+        # Simplified: Add book logic
         return redirect('book_list')
     return render(request, 'relationship_app/add_book.html')
 
