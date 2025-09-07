@@ -8,7 +8,13 @@ from .models import Book, Library
 # Function-based view
 def book_list(request):
     books = Book.objects.all()
+<<<<<<< HEAD
     return render(request, 'relationship_app/list_books.html', {'books': books})
+=======
+    output = ", ".join([f"{book.title} by {book.author.name}" for book in books])
+    return HttpResponse(output)
+
+>>>>>>> 12dc951916406a4824770851ea23a5f219f466e8
 
 # Class-based view
 class LibraryDetailView(DetailView):
