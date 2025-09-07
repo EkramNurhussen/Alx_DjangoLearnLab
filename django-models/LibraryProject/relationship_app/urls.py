@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView  # <-- Add this import
 from . import views
+from .views import list_books
 
 urlpatterns = [
     path('', RedirectView.as_view(url='books/', permanent=False)),
