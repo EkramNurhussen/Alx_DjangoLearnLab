@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import DetailView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.decorators import login_required
-from .models import Book, Library
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from .models import Book, Library, UserProfile
 
 def book_list(request):
     books = Book.objects.all()
@@ -11,9 +11,8 @@ def book_list(request):
 
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = 'relationship_app/library_detail.html'
-    context_object_name = 'library'
-    pk_url_kwarg = 'id'
+    template_name = "relationship_app/library_detail.html"
+    context_object_name = "library"
 
 def user_login(request):
     if request.method == 'POST':
@@ -37,7 +36,53 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            UserProfile.objects.create(user=user, role='Member')
             return redirect('book_list')
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+
+# Role-based views with correct decorator application
+def check_admin(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+
+def check_librarian(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Librarian'
+
+def check_member(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+
+@login_required
+@user_passes_test(check_admin)
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html', {'message': 'Admin Dashboard'})
+
+@login_required
+@user_passes_test(check_librarian)
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html', {'message': 'Librarian Dashboard'})
+
+@login_required
+@user_passes_test(check_member)
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html', {'message': 'Member Dashboard'})
+
+@login_required
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    if request.method == 'POST':
+        # Simplified: Add book logic (e.g., form handling would go here)
+        return redirect('book_list')
+    return render(request, 'relationship_app/add_book.html')
+
+@login_required
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, pk):
+    # Simplified: Edit book logic
+    return redirect('book_list')
+
+@login_required
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, pk):
+    # Simplified: Delete book logic
+    return redirect('book_list')
