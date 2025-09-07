@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-h2w8-fkh@cs!_+s=$z1x^zvx0cvfj%tgo61w2htoxz(31#^lnj
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+LOGIN_URL = '/login/'
 
 # Application definition
 
