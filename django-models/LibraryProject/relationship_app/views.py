@@ -7,10 +7,14 @@ from .models import Book
 from .models import Library
 from django.http import HttpResponse
 
+# Function-based view
 def book_list(request):
     books = Book.objects.all()
     output = ", ".join([f"{book.title} by {book.author.name}" for book in books])
     return HttpResponse(output)
+
+
+# Class-based view
 class LibraryDetailView(DetailView):
     model = Library
     template_name = "relationship_app/library_detail.html"
