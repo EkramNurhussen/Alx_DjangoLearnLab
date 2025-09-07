@@ -1,8 +1,7 @@
 # Retrieve Operation
 
 **Command**:
-
-
-**Expected Output**:
-
-# Comment: Successfully retrieved the Book instance with all attributes.
+```python
+from bookshelf.models import Book
+book = Book.objects.get(title="1984")
+print(book.title, book.author, book.publication_year)
