@@ -60,3 +60,16 @@ Run `python manage.py check --deploy` to verify security settings.
   - Verify CSRF protection by submitting forms without tokens.
   - Test XSS by injecting `<script>alert('test')</script>` (should be escaped).
   - Run `python manage.py check --deploy` to validate settings.
+  # HTTPS and Secure Redirects
+- **Location**: `LibraryProject/LibraryProject/settings.py`, `deployment/nginx.conf`
+- **Settings**:
+  - `SECURE_SSL_REDIRECT`: Redirects HTTP to HTTPS.
+  - `SECURE_HSTS_SECONDS`: Enforces HTTPS for 1 year.
+  - `SECURE_HSTS_INCLUDE_SUBDOMAINS/PRELOAD`: Applies to subdomains and allows preloading.
+  - `SESSION_COOKIE_SECURE/CSRF_COOKIE_SECURE`: HTTPS-only cookies.
+- **Deployment**: Nginx configuration in `deployment/nginx.conf` for SSL/TLS.
+- **Security Review**:
+  - Verified HTTPS redirects using browser and `curl`.
+  - Cookies confirmed as HTTPS-only via browser dev tools.
+  - Headers (`X-Frame-Options`, etc.) verified.
+  - **Improvements**: Add rate limiting and monitoring for production.
