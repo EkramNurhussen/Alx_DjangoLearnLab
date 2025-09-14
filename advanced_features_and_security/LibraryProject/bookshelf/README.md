@@ -47,3 +47,16 @@
 - Deployment: Nginx config in `deployment/nginx.conf` for SSL (redirect HTTP to HTTPS).
 
 Run `python manage.py check --deploy` to verify security settings.
+# Security Best Practices
+- **Location**: `LibraryProject/LibraryProject/settings.py`, `bookshelf/templates/bookshelf/`, `bookshelf/views.py`
+- **Settings**:
+  - `DEBUG=False`: Prevents sensitive info exposure.
+  - `SECURE_BROWSER_XSS_FILTER`, `X_FRAME_OPTIONS`, `SECURE_CONTENT_TYPE_NOSNIFF`: Browser-side protections.
+  - `CSRF_COOKIE_SECURE`, `SESSION_COOKIE_SECURE`: HTTPS-only cookies.
+  - `CSP`: Restricts content sources via `django-csp` middleware.
+- **Templates**: Added `{% csrf_token %}` to `form_example.html`.
+- **Views**: Use Django ORM for queries and `BookForm` for input validation.
+- **Testing**:
+  - Verify CSRF protection by submitting forms without tokens.
+  - Test XSS by injecting `<script>alert('test')</script>` (should be escaped).
+  - Run `python manage.py check --deploy` to validate settings.

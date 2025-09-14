@@ -6,21 +6,18 @@ from .forms import BookForm  # Ensure forms.py exists with BookForm
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
-    books = Book.objects.all()
+    books = Book.objects.filter(author__is_active=True)  # Safe ORM query
     return render(request, 'bookshelf/book_list.html', {'books': books})
-
 @permission_required('bookshelf.can_create', raise_exception=True)
 def book_create(request):
     if request.method == 'POST':
         form = BookForm(request.POST)
-        if form.is_valid():
+        if form.is_valid():  # Input validation
             form.save()
-            messages.success(request, 'Book created successfully!')
             return redirect('book_list')
     else:
         form = BookForm()
     return render(request, 'bookshelf/form_example.html', {'form': form})
-
 @permission_required('bookshelf.can_edit', raise_exception=True)
 def book_edit(request, pk):
     book = get_object_or_404(Book, pk=pk)
