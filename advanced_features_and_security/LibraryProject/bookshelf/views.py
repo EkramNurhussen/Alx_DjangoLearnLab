@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import permission_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages  # Optional, for user feedback
 from .models import Book
-from .forms import BookForm
+from .forms import BookForm  # Ensure forms.py exists with BookForm
 
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
@@ -14,6 +15,7 @@ def book_create(request):
         form = BookForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Book created successfully!')
             return redirect('book_list')
     else:
         form = BookForm()
@@ -21,11 +23,12 @@ def book_create(request):
 
 @permission_required('bookshelf.can_edit', raise_exception=True)
 def book_edit(request, pk):
-    book = Book.objects.get(pk=pk)
+    book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
         form = BookForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Book updated successfully!')
             return redirect('book_list')
     else:
         form = BookForm(instance=book)
@@ -33,6 +36,9 @@ def book_edit(request, pk):
 
 @permission_required('bookshelf.can_delete', raise_exception=True)
 def book_delete(request, pk):
-    book = Book.objects.get(pk=pk)
-    book.delete()
-    return redirect('book_list')
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        messages.success(request, 'Book deleted successfully!')
+        return redirect('book_list')
+    return render(request, 'bookshelf/book_confirm_delete.html', {'book': book})  # Optional confirmation template
