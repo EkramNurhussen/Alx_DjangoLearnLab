@@ -45,29 +45,25 @@ INSTALLED_APPS = [
     'bookshelf',
     'relationship_app',
 ]
-# Security settings
-DEBUG = False  # Set to False in production
-SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_CONTENT_TYPE_NOSNIFF = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# Security Configurations (from Task 2)
+DEBUG = False  # Disable debug mode in production
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS protection
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME-type sniffing
+CSRF_COOKIE_SECURE = True  # HTTPS-only CSRF cookies
+SESSION_COOKIE_SECURE = True  # HTTPS-only session cookies
 
-# Content Security Policy
+# Content Security Policy (from Task 2)
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'",)
 
-# HTTPS settings
-SECURE_SSL_REDIRECT = True
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# Cookie settings (already in Task 2)
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
+# HTTPS and Secure Redirects (Task 3)
+SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to subdomains
+SECURE_HSTS_PRELOAD = True  # Allow HSTS preloading
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
