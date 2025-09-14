@@ -1,7 +1,19 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.db import models
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Use custom user model
 
+    class Meta:
+        permissions = [
+            ("can_view","can_create","can_edit","can_delete" )
+        ]
+
+    def __str__(self):
+        return self.title
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
