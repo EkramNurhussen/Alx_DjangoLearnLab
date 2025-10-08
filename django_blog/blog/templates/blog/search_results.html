@@ -1,10 +1,10 @@
 {% extends 'blog/base.html' %}
-{% block title %}Blog Posts{% endblock %}
+{% block title %}Search Results{% endblock %}
 {% block content %}
 <div class="container">
-    <h2>Blog Posts</h2>
+    <h2>Search Results</h2>
     <form method="get" action="{% url 'search' %}">
-        <input type="text" name="q" placeholder="Search posts...">
+        <input type="text" name="q" placeholder="Search posts..." value="{{ request.GET.q }}">
         <button type="submit">Search</button>
     </form>
     {% for post in posts %}
@@ -17,10 +17,7 @@
             {% endfor %}</p>
     </div>
     {% empty %}
-    <p>No posts available.</p>
+    <p>No results found.</p>
     {% endfor %}
-    {% if user.is_authenticated %}
-    <a href="{% url 'post_create' %}">Create New Post</a>
-    {% endif %}
 </div>
 {% endblock %}
