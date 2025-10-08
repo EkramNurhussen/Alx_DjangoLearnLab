@@ -12,3 +12,5 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
+    # BookViewSet uses TokenAuthentication and requires IsAuthenticated permission
+# Users must include 'Authorization: Token <token>' in request headers

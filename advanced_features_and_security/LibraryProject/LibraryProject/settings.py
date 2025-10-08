@@ -64,6 +64,7 @@ SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to subdomains
 SECURE_HSTS_PRELOAD = True  # Allow HSTS preloading
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
