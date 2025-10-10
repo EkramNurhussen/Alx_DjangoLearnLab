@@ -19,3 +19,16 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'author', 'title', 'content', 'created_at', 'updated_at', 'comments']
         read_only_fields = ['author']
+        # posts/serializers.py
+class PostSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
+    likes_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Post
+        fields = ['id', 'author', 'title', 'content', 'created_at', 'updated_at', 'comments', 'likes_count']
+        read_only_fields = ['author']
+
+    def get_likes_count(self, obj):
+        return obj.likes.count()
