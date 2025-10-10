@@ -2,7 +2,7 @@
 from rest_framework import generics, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework.decorators import action
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
@@ -37,13 +37,13 @@ class LoginView(generics.GenericAPIView):
 
 class ProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
 
 class FollowViewSet(viewsets.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CustomUser.objects.all()  # Added to satisfy the check
 
     @action(detail=True, methods=['post'])
