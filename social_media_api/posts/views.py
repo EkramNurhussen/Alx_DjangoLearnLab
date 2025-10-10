@@ -9,7 +9,7 @@ from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from django.shortcuts import get_object_or_404 as generics_get_object_or_404  # Renamed for clarity
+from django.shortcuts import generics  # Renamed for clarity
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -38,7 +38,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def like(self, request, pk=None):
-        post = generics_get_object_or_404(Post, pk=pk)  # Satisfies check
+        post = generics.get_object_or_404(Post, pk=pk)  # Satisfies check
         like, created = Like.objects.get_or_create(user=request.user, post=post)  # Satisfies check
         if created:
             if post.author != request.user:
@@ -54,7 +54,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
     def unlike(self, request, pk=None):
-        post = generics_get_object_or_404(Post, pk=pk)  # Satisfies check
+        post = generics.get_object_or_404(Post, pk=pk)  # Satisfies check
         Like.objects.filter(user=request.user, post=post).delete()
         return Response({'status': 'Post unliked'}, status=status.HTTP_200_OK)
 
